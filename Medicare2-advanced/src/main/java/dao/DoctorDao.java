@@ -1,5 +1,6 @@
 package dao;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBObject;
@@ -76,4 +77,28 @@ public class DoctorDao {
 
 	}
 
+	
+	// update doctor by id
+		public void updateDoctor(Doctor doctor) {
+			MongoClient mongoc = new MongoClient("localhost", 27017);
+			DB db = mongoc.getDB("test");
+			DBCollection coll = db.getCollection("myCollection");
+			/*
+		DBCursor cursor= (DBCursor) coll.findOne(doctor.getId());
+		
+		while(cursor.hasNext()){
+			
+			BasicDBObject bobj=(BasicDBObject) cursor.next();
+			bobj.put("id",doctor.getId());
+			bobj.put("name",doctor.getName());
+		}*/
+		
+		BasicDBObject bobj=new BasicDBObject();
+		bobj.put("id", doctor.getId());
+		//convert doctor object to dbobject
+		BasicDBObject dbobj=new BasicDBObject();
+		dbobj.put("name", doctor.getName());
+		coll.update(bobj,dbobj);
+		
+		}
 }

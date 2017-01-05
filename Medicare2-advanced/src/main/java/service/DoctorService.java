@@ -5,6 +5,9 @@ import java.util.Iterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
@@ -22,25 +25,29 @@ public class DoctorService {
 
 	@Autowired
 	private DoctorDao doctorDao;
-	
-	
 
-	public void insert(Doctor doctor){
-		
+	public void insert(Doctor doctor) {
+
 		this.doctorDao.insert(doctor);
-		
+
 	}
-	
-	
-	public JSONArray getAllDoctors(){
-		
+
+	public JSONArray getAllDoctors() {
+
 		return doctorDao.getAllDoctors();
-		
+
 	}
-	
-public JSONObject getDoctorById(int id){
-		
+
+	public JSONObject getDoctorById(int id) {
+
 		return doctorDao.getDoctorById(id);
-		
+
+	}
+
+	// update doctor by id using PUT
+	public void updateDoctor(Doctor doctor) {
+
+		doctorDao.updateDoctor(doctor);
+
 	}
 }

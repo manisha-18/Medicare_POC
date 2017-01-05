@@ -25,12 +25,11 @@ public class DoctorController {
 	private DoctorService doctorService;
 	
 	//save doctor entity using POST
-	@RequestMapping(method=RequestMethod.POST, 
-			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public String insert(@RequestBody Doctor doctor){
+	@RequestMapping(method=RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public void insert(@RequestBody Doctor doctor){
 		
 		doctorService.insert(doctor);
-		return "insertion completed";
+		
 		
 	}
 	
@@ -53,4 +52,13 @@ public class DoctorController {
 		return doctorService.getDoctorById(id);
 		
 	}
+	
+	//update doctor by id using PUT
+		@RequestMapping(value="/{id}",method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
+		public void updateDoctor(@RequestBody Doctor doctor){
+			
+			doctorService.updateDoctor(doctor);
+			
+		}
+	
 }
