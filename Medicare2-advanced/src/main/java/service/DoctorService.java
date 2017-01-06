@@ -50,4 +50,14 @@ public class DoctorService {
 		doctorDao.updateDoctor(doctor);
 
 	}
+	
+	//delete a doctor
+			public void deleteDoctor(int id) {
+				doctorDao.deleteDoctor(id);
+			}
+			
+			//delete all doctors
+			public void deleteAllDoctor() {
+				doctorDao.deleteAllDoctor();
+			}
 }

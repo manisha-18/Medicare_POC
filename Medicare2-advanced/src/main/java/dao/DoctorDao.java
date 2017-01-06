@@ -1,6 +1,5 @@
 package dao;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBObject;
@@ -15,7 +14,7 @@ import net.minidev.json.JSONObject;
 @Component
 public class DoctorDao {
 
-	// insert
+	// insert a doctor
 	public void insert(Doctor doctor) {
 		MongoClient mongoc = new MongoClient("localhost", 27017);
 		DB db = mongoc.getDB("test");
@@ -28,7 +27,7 @@ public class DoctorDao {
 
 	}
 
-	// getalldoctors
+	// get all doctors
 	public JSONArray getAllDoctors() {
 
 		MongoClient mongoc = new MongoClient("localhost", 27017);
@@ -52,17 +51,16 @@ public class DoctorDao {
 
 	}
 
-	// getbyid
+	// get doctor by id
 	public JSONObject getDoctorById(int id) {
 
 		MongoClient mongoc = new MongoClient("localhost", 27017);
 		DB db = mongoc.getDB("test");
 		DBCollection coll = db.getCollection("myCollection");
 
-		BasicDBObject bobj1=new BasicDBObject();
+		BasicDBObject bobj1 = new BasicDBObject();
 		bobj1.append("id", id);
-		
-		
+
 		DBCursor cursor = coll.find(bobj1);
 		JSONObject jobj = new JSONObject();
 		while (cursor.hasNext()) {
@@ -70,35 +68,56 @@ public class DoctorDao {
 			jobj.put("id", bobj2.get("id"));
 			jobj.put("name", bobj2.get("name"));
 
-		
 		}
 
 		return jobj;
 
 	}
 
-	
 	// update doctor by id
-		public void updateDoctor(Doctor doctor) {
-			MongoClient mongoc = new MongoClient("localhost", 27017);
-			DB db = mongoc.getDB("test");
-			DBCollection coll = db.getCollection("myCollection");
-			/*
-		DBCursor cursor= (DBCursor) coll.findOne(doctor.getId());
-		
-		while(cursor.hasNext()){
-			
-			BasicDBObject bobj=(BasicDBObject) cursor.next();
-			bobj.put("id",doctor.getId());
-			bobj.put("name",doctor.getName());
-		}*/
-		
-		BasicDBObject bobj=new BasicDBObject();
-		bobj.put("id", doctor.getId());
-		//convert doctor object to dbobject
-		BasicDBObject dbobj=new BasicDBObject();
-		dbobj.put("name", doctor.getName());
-		coll.update(bobj,dbobj);
-		
+	public void updateDoctor(Doctor doctor) {
+		MongoClient mongoc = new MongoClient("localhost", 27017);
+		DB db = mongoc.getDB("test");
+		DBCollection coll = db.getCollection("myCollection");
+		BasicDBObject queryobj = new BasicDBObject();
+		queryobj.put("id", doctor.getId());
+		DBCursor cursor = (DBCursor) coll.find(queryobj);
+
+		while (cursor.hasNext()) {
+			BasicDBObject bobj = (BasicDBObject) cursor.next();
+			bobj.put("id", doctor.getId());
+			bobj.put("name", doctor.getName());
+			coll.update(queryobj, bobj);
 		}
+
+	}
+	
+	//delete a doctor
+	public void deleteDoctor(int id) {
+		MongoClient mongoc = new MongoClient("localhost", 27017);
+		DB db = mongoc.getDB("test");
+		DBCollection coll = db.getCollection("myCollection");
+		BasicDBObject queryobj = new BasicDBObject();
+		queryobj.put("id",id);
+		DBCursor cursor = (DBCursor) coll.find(queryobj);
+
+		while (cursor.hasNext()) {
+			BasicDBObject bobj = (BasicDBObject) cursor.next();
+			coll.remove(bobj);
+		}
+
+	}
+	
+	//delete all doctors
+	public void deleteAllDoctor() {
+		MongoClient mongoc = new MongoClient("localhost", 27017);
+		DB db = mongoc.getDB("test");
+		DBCollection coll = db.getCollection("myCollection");
+		DBCursor cursor = (DBCursor) coll.find();
+		BasicDBObject bobj=new BasicDBObject();
+		coll.remove(bobj);
+		
+
+	}
+	
 }
